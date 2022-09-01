@@ -24,14 +24,18 @@
 						</div>
 						<div class="content__right__item__right__bottom__count">
 							<span class="content__right__item__right__bottom__count__minus-iconfont iconfont"
-								v-show="cartData?.[shopId]?.[item.id]?.['count']">
+								v-show="cartData?.[shopId]?.[item.id]?.['count']"
+								@click="()=>{changeItemToCart(shopId,item.id,-1)}"
+								>
 								&#xe8c5;
 							</span>
 							<span class="content__right__item__right__bottom__count__number"
 								v-show="cartData?.[shopId]?.[item.id]?.['count']">
 								{{ cartData?.[shopId]?.[item.id]?.['count'] }} </span>
 								<!-- 使用了?.语法, 找不到会返回 undefined, 不会报错 -->
-							<span class="content__right__item__right__bottom__count__plus-iconfont iconfont"> &#xe601;
+							<span
+							 @click="()=>{changeItemToCart(shopId,item.id,1)}"
+							 class="content__right__item__right__bottom__count__plus-iconfont iconfont"> &#xe601;
 							</span>
 						</div>
 					</div>
@@ -106,16 +110,20 @@ const useCartEffect = () => {
 	//从vuex中获取数据
 	const store = useStore();
 	const { cartData } = toRefs(store.state);
-	return { cartData }
+	//向购物车增加内容，两个参数，一个是商铺id，一个是商品id
+	const changeItemToCart = (shopId,itemId,num) =>{
+		store.commit('changeItemToCart',{shopId,itemId,num})
+	}
+	return { cartData,changeItemToCart }
 }
 
 export default {
 	name: 'Content',
 	setup() {
-		const { cartData } = useCartEffect();
+		const { cartData,changeItemToCart } = useCartEffect();
 		const { currentItemName, handleLeftItemChange } = useTabEffect();
 		const { rightItems, shopId } = userContentEffect(currentItemName);
-		return { leftItems, currentItemName, handleLeftItemChange, rightItems, cartData, shopId };
+		return { leftItems, currentItemName, handleLeftItemChange, rightItems, cartData, shopId,changeItemToCart };
 	},
 }
 </script>

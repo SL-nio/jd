@@ -5,7 +5,7 @@
                 <img src="https://markdown-1253389072.cos.ap-nanjing.myqcloud.com/202202261637089.png" 
                 alt=""
                 class="cart__left__icon__image"/>
-                <span class="cart__left__icon__number">1</span>
+                <span class="cart__left__icon__number">{{total}}</span>
             </div>
             <div class="cart__left__count">
                 总计：<span class="cart__left__count__price">￥128</span>
@@ -16,8 +16,35 @@
 </template>
 
 <script>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
+
 export default {
 	name: "Cart",
+	setup(){
+		const store = useStore();
+		const route = useRoute();
+		//获取商铺id
+		const shopId = route.params.id;
+		//获取购物车数据
+		const cartData = store.state.cartData;
+		//定义计算属性，计算总量
+		const total = computed(()=>{
+			//获取当前商铺的所有商品
+			const itemList = cartData[shopId];
+			//计算总量
+			let count = 0;
+			//如果没有记录,不用计算直接返回，如果有酒遍历
+			if(itemList){
+				for (const key in itemList) {
+					count+=itemList[key].count;
+				}
+			}
+			return count;
+		})
+		return {total}
+	}
 };
 </script>
 
