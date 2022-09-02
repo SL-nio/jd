@@ -45,11 +45,11 @@
 </template>
 <script>
 
-import { ref, toRefs } from '@vue/reactivity';
+import { ref } from '@vue/reactivity';
 import { useRoute } from 'vue-router';
-import { useStore } from 'vuex';
 import { get } from '../../utils/request';
 import { watchEffect } from '@vue/runtime-core';
+import { commonCartEffect } from './commonCartEffect';
 
 const leftItems = [
 	{
@@ -104,22 +104,12 @@ const userContentEffect = (currentItemName) => {
 	});
 	return { rightItems, shopId }
 }
-//购物车逻辑
-const useCartEffect = () => {
-	//从vuex中获取数据
-	const store = useStore();
-	const { cartData } = toRefs(store.state);
-	//向购物车增加内容，两个参数，一个是商铺id，一个是商品id
-	const changeItemToCart = (shopId,itemId,itemInfo,num) =>{
-		store.commit('changeItemToCart',{shopId,itemId,itemInfo,num})
-	}
-	return { cartData,changeItemToCart }
-}
+
 
 export default {
 	name: 'Content',
 	setup() {
-		const { cartData,changeItemToCart } = useCartEffect();
+		const { cartData,changeItemToCart } = commonCartEffect();
 		const { currentItemName, handleLeftItemChange } = useTabEffect();
 		const { rightItems, shopId } = userContentEffect(currentItemName);
 		return { leftItems, currentItemName, handleLeftItemChange, rightItems, cartData, shopId,changeItemToCart };

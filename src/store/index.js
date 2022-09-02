@@ -23,11 +23,23 @@ export default createStore({
       }
       //数量+1或者减1
       item.count+=num
-      //把商品的相关信息，加入到对应的商铺里面
+      //如果count为0，从商铺的购物车，删除该商品
+      if(item.count === 0){
+        //从shopInfo中删除item
+        delete shopInfo.itemId
+      }else{
+        //把商品的相关信息，加入到对应的商铺里面
       shopInfo[itemId] = item
-      //把对应的商铺信息写入到cartdate里面
-      state.cartData[shopId] = shopInfo
-
+      }
+      
+      //如果商铺下面没有商品，那么清楚该商铺
+      if(JSON.stringify(shopInfo) === "{}"){
+        delete state.cartData[shopId]
+      }else{
+       //把对应的商铺信息写入到cartdate里面
+      state.cartData[shopId] = shopInfo 
+      }
+      
     }
   },
   actions: {
