@@ -8,7 +8,7 @@
                 <span class="cart__left__icon__number">{{total}}</span>
             </div>
             <div class="cart__left__count">
-                总计：<span class="cart__left__count__price">￥128</span>
+                总计：<span class="cart__left__count__price">{{sumPrice}}</span>
             </div>
         </div>
     <div class="cart__right">去结算</div>
@@ -43,7 +43,21 @@ export default {
 			}
 			return count;
 		})
-		return {total}
+		//定义计算总价，sumPrice
+		const sumPrice = computed(()=>{
+			//获取商铺所有商品
+			const itemList = cartData[shopId]
+			//计算总价
+			let  sum = 0.0
+			//如果没有数量记录，不用计算总量，直接返回，如果有则遍历计算
+			if(itemList){
+				for(const key in itemList ){
+					sum+= itemList[key].count*itemList[key].promotionPrice
+				}
+			}
+			return sum.toFixed(2)
+		})
+		return {total,sumPrice}
 	}
 };
 </script>
@@ -72,18 +86,18 @@ export default {
 			}
 			&__number {
 				display: block;
-				width: 20px;
+				min-width: 20px;
 				height: 20px;
 				background: #e93b3b;
-				border-radius: 100%;
+				border-radius:10rem;
 				font-family: PingFangSC-Medium;
 				font-size: 16px;
 				transform: scale(0.5, 0.5);
-				transform-origin: center top;
+				transform-origin: left top;
 				color: #ffffff;
 				text-align: center;
 				position: absolute;
-				right: -10px;
+				left: 24rem;
 				top: -4px;
 			}
 		}

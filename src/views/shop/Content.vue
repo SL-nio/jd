@@ -16,8 +16,7 @@
 					<div class="content__right__item__right__middle">{{ item.sales }}</div>
 					<div class="content__right__item__right__bottom">
 						<div class="content__right__item__right__bottom__price">
-							<div class="content__right__item__right__bottom__price__promotion">￥{{ item.promotionPrice
-							}}
+							<div class="content__right__item__right__bottom__price__promotion">￥{{ item.promotionPrice}}
 							</div>
 							<div class="content__right__item__right__bottom__price__original">￥{{ item.originalPrice }}
 							</div>
@@ -25,7 +24,7 @@
 						<div class="content__right__item__right__bottom__count">
 							<span class="content__right__item__right__bottom__count__minus-iconfont iconfont"
 								v-show="cartData?.[shopId]?.[item.id]?.['count']"
-								@click="()=>{changeItemToCart(shopId,item.id,-1)}"
+								@click="()=>{changeItemToCart(shopId,item.id,item,-1)}"
 								>
 								&#xe8c5;
 							</span>
@@ -34,7 +33,7 @@
 								{{ cartData?.[shopId]?.[item.id]?.['count'] }} </span>
 								<!-- 使用了?.语法, 找不到会返回 undefined, 不会报错 -->
 							<span
-							 @click="()=>{changeItemToCart(shopId,item.id,1)}"
+							 @click="()=>{changeItemToCart(shopId,item.id,item,1)}"
 							 class="content__right__item__right__bottom__count__plus-iconfont iconfont"> &#xe601;
 							</span>
 						</div>
@@ -111,8 +110,8 @@ const useCartEffect = () => {
 	const store = useStore();
 	const { cartData } = toRefs(store.state);
 	//向购物车增加内容，两个参数，一个是商铺id，一个是商品id
-	const changeItemToCart = (shopId,itemId,num) =>{
-		store.commit('changeItemToCart',{shopId,itemId,num})
+	const changeItemToCart = (shopId,itemId,itemInfo,num) =>{
+		store.commit('changeItemToCart',{shopId,itemId,itemInfo,num})
 	}
 	return { cartData,changeItemToCart }
 }
