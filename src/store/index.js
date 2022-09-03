@@ -28,6 +28,8 @@ export default createStore({
         //从shopInfo中删除item
         delete shopInfo.itemId
       }else{
+        //把勾选状态改为true
+        item.checked = true
         //把商品的相关信息，加入到对应的商铺里面
       shopInfo[itemId] = item
       }
@@ -40,6 +42,18 @@ export default createStore({
       state.cartData[shopId] = shopInfo 
       }
       
+    },
+    changeItemChecked(state,payload){
+      const {shopId,itemId} = payload
+      //找到对应商品
+      const item = state.cartData[shopId][itemId]
+      //切换选中状态
+      item.checked = ! item.checked
+    },
+    clearCart(state,payload){
+      const {shopId} = payload
+      //清空购物车
+      state.cartData[shopId] = {}
     }
   },
   actions: {
